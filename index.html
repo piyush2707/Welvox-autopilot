@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff7eb">
+<title>Welvox AUTOPILOT</title>
+<style>
+:root{--bg:#fff7eb;--paper:#fffdf8;--ink:#28231e;--muted:#82766a;--orange:#ed762b;--line:#e9ddcc;--dark:#29251f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,sans-serif}
+button,input{font:inherit}
+button{min-height:48px;padding:12px 16px;border:0;border-radius:14px;cursor:pointer;font-weight:750}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.app{width:100%;max-width:430px;min-height:100dvh;margin:auto;padding:20px 18px 104px}
+header{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:21px;font-weight:900;letter-spacing:-1px}
+.logo b{color:var(--orange)}
+.tag,.chip{font-size:11px;font-weight:800;letter-spacing:.6px;border:1px solid var(--line);border-radius:30px;padding:5px 9px;color:var(--muted)}
+h1{font-size:36px;line-height:1.05;letter-spacing:-1.7px;margin:30px 0 14px}
+h2{font-size:22px;letter-spacing:-.6px;margin:26px 0 10px}
+h3{font-size:18px;margin:8px 0}
+p{color:var(--muted)}
+.eyebrow{font-size:11px;letter-spacing:1.8px;font-weight:850;color:var(--orange)}
+.hero{background:var(--dark);color:#fff7eb;border-radius:24px;padding:23px;margin-top:25px}
+.hero p{color:#d5c6b5}
+.hero h2{font-size:29px;line-height:1.15;margin:12px 0}
+.mark{color:#f5a36e;font-weight:850;font-size:12px;letter-spacing:1px}
+.primary{background:var(--orange);color:white;width:100%}
+.secondary{background:#f7e8d5;color:var(--ink);width:100%}
+.back{background:transparent;padding:8px 0;color:var(--muted)}
+.search{width:100%;min-height:50px;padding:12px 14px;background:var(--paper);border:1px solid var(--line);border-radius:14px;margin:18px 0 8px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:17px;margin:12px 0}
+.card p{font-size:14px;margin:6px 0 14px}
+.meta{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.card button{margin-top:14px}
+.steps{padding-left:22px;color:var(--muted)}
+.steps li{padding:5px 0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:390px;overflow:auto;background:var(--dark);color:#fff0dc;border-radius:15px;padding:14px;font:12px/1.65 ui-monospace,monospace}
+.note{font-size:12px;background:#f7ead8;border-radius:13px;padding:12px}
+.status{font-size:13px;color:var(--muted);min-height:24px}
+a{color:#a34d1c;overflow-wrap:anywhere}
+.hidden{display:none!important}
+footer{margin-top:30px;font-size:11px;color:var(--muted)}
+nav{position:fixed;z-index:5;bottom:0;left:0;right:0;display:flex;justify-content:center;background:#fffdf5f2;backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+nav button{background:transparent;border-radius:0;width:33.333%;max-width:145px;color:var(--muted)}
+nav button.active{color:var(--orange)}
+nav span{display:block;font-size:11px}
+.sticky{position:sticky;bottom:75px;background:var(--bg);padding:8px 0}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo">welvox<b>.</b></div>
+  <div class="tag">AUTOPILOT / 01</div>
+</header>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <div class="mark">PLAN → EXECUTE → VERIFY</div>
+    <h2>Less prompting.<br>More progress.</h2>
+    <p>Reusable workflows that help coding agents take tasks from a clear goal to an honest result.</p>
+    <button class="primary" onclick="loadSkills()">Explore skills ↓</button>
+  </div>
+  <h2>Skill library</h2>
+  <p>Discover instructions from this public GitHub repository.</p>
+  <input id="search" class="search" placeholder="Search skills..." aria-label="Search skills">
+  <div id="status" class="status">Loading public skills…</div>
+  <div id="list"></div>
+  <footer>Welvox AUTOPILOT · Open instructions, transparent results.</footer>
+</section>
+
+<section id="detail" class="hidden">
+  <button class="back" onclick="show('home')">← All skills</button>
+  <div class="eyebrow">SKILL DETAILS</div>
+  <h1 id="skillName">AUTOPILOT</h1>
+  <p id="skillDesc"></p>
+  <div id="skillPath" class="meta"></div>
+  <h2>Instructions preview</h2>
+  <pre id="preview">Loading source…</pre>
+  <div class="sticky">
+    <button class="primary" onclick="show('install')">Copy &amp; install →</button>
+  </div>
+</section>
+
+<section id="install" class="hidden">
+  <button class="back" onclick="show('detail')">← Skill details</button>
+  <div class="eyebrow">INSTALLATION</div>
+  <h1>Put it to work.</h1>
+  <p id="installName">AUTOPILOT</p>
+  <button class="primary" id="copy">Copy complete SKILL.md</button>
+  <p id="copyStatus" class="status">Copies the Markdown source, including frontmatter.</p>
+
+  <h2>Claude Code</h2>
+  <ol class="steps">
+    <li>Open your target project's GitHub repository.</li>
+    <li>Create <code>.claude/skills/autopilot/SKILL.md</code>.</li>
+    <li>Paste the copied text and commit the file.</li>
+    <li>In a supported Claude Code environment, ask it to use the <code>autopilot</code> skill.</li>
+  </ol>
+
+  <h2>OpenAI Codex</h2>
+  <ol class="steps">
+    <li>Open your target project's GitHub repository.</li>
+    <li>Create <code>.agents/skills/autopilot/SKILL.md</code>.</li>
+    <li>Paste the copied text and commit the file.</li>
+    <li>In a Codex environment that has access to the project, ask it to use the <code>autopilot</code> skill.</li>
+  </ol>
+
+  <h2>Other agents</h2>
+  <p>Use the host's documented skill-import or project-instructions mechanism. A compatible SKILL.md alone does not guarantee automatic discovery.</p>
+  <div class="note">A phone can edit a GitHub-hosted project, but it does not itself provide the local shell, file access, or execution tools that an agent may need. The host agent must have access to the target project.</div>
+  <h2>Original source</h2>
+  <a id="source" href="#" target="_blank" rel="noopener">Open SKILL.md on GitHub ↗</a>
+</section>
+</main>
+</div>
+
+<nav>
+  <button id="navHome" class="active" onclick="show('home')">⌂<span>Explore</span></button>
+  <button id="navDetail" onclick="show('detail')">▤<span>Preview</span></button>
+  <button id="navInstall" onclick="show('install')">↓<span>Install</span></button>
+</nav>
+
+<script>
+const $=id=>document.getElementById(id);
+const pathParts=location.pathname.split('/').filter(Boolean);
+const owner=location.hostname.endsWith('.github.io')
+  ? location.hostname.split('.')[0] : '';
+const repo=owner?(pathParts[0]||owner+'.github.io'):'';
+const branch='main';
+let skills=[],chosen=null;
+
+function show(page){
+  ['home','detail','install'].forEach(id=>$(id).classList.toggle('hidden',id!==page));
+  ['Home','Detail','Install'].forEach(n=>$('nav'+n).classList.toggle('active',n.toLowerCase()===page));
+  window.scrollTo(0,0);
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function front(text,key){
+  const m=text.match(new RegExp('^'+key+':\\\\s*(.+)$','m'));
+  return m?m[1].trim().replace(/^["']|["']$/g,''):'';
+}
+function render(){
+  const q=$('search').value.toLowerCase();
+  const found=skills.filter(s=>(s.name+' '+s.description).toLowerCase().includes(q));
+  $('list').innerHTML=found.map((s,i)=>`
+    <article class="card">
+      <span class="chip">AGENT SKILL</span>
+      <h3>${esc(s.name)}</h3>
+      <p>${esc(s.description)}</p>
+      <div class="meta">${esc(s.path)}</div>
+      <button class="secondary" data-path="${esc(s.path)}">View instructions →</button>
+    </article>`).join('');
+  $('list').querySelectorAll('button').forEach(b=>b.onclick=()=>openSkill(b.dataset.path));
+  if(!found.length)$('list').innerHTML='<p>No matching skills found.</p>';
+}
+async function loadSkills(){
+  $('status').textContent='Loading public skills…';
+  $('home').scrollIntoView({behavior:'smooth'});
+  if(!owner||!repo){
+    $('status').textContent='Open this site from your GitHub Pages repository URL.';
+    return;
+  }
+  try{
+    const r=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/skills?ref=${branch}`);
+    if(!r.ok)throw Error('GitHub API '+r.status);
+    const dirs=await r.json();
+    const results=await Promise.all(dirs.filter(d=>d.type==='dir').map(async d=>{
+      const u=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${d.path}/SKILL.md`;
+      const res=await fetch(u);
+      if(!res.ok)return null;
+      const text=await res.text();
+      return {name:front(text,'name')||d.name,description:front(text,'description')||'Reusable agent workflow.',path:d.path,text,url:`https://github.com/${owner}/${repo}/blob/${branch}/${d.path}/SKILL.md`};
+    }));
+    skills=results.filter(Boolean);
+    $('status').textContent=skills.length?`${skills.length} skill${skills.length===1?'':'s'} available`:'No SKILL.md files found in skills/.';
+    render();
+  }catch(e){
+    $('status').textContent='Could not load skills. Confirm the repository is public, the main branch exists, and skills/ contains a skill folder.';
+  }
+}
+function openSkill(path){
+  chosen=skills.find(s=>s.path===path);
+  if(!chosen)return;
+  $('skillName').textContent=chosen.name;
+  $('skillDesc').textContent=chosen.description;
+  $('skillPath').textContent=chosen.path;
+  $('preview').textContent=chosen.text;
+  $('installName').textContent=chosen.name+' · '+chosen.path;
+  $('source').href=chosen.url;
+  $('copyStatus').textContent='Copies the complete Markdown source.';
+  show('detail');
+}
+async function copyText(text){
+  try{await navigator.clipboard.writeText(text);return true}
+  catch(e){
+    const t=document.createElement('textarea');
+    t.value=text;t.style.position='fixed';t.style.opacity='0';
+    document.body.appendChild(t);t.select();
+    const ok=document.execCommand('copy');t.remove();return ok;
+  }
+}
+$('copy').onclick=async()=>{
+  if(!chosen)return;
+  const ok=await copyText(chosen.text);
+  $('copyStatus').textContent=ok?'Copied. Paste into SKILL.md and save it.':'Copy was blocked. Open the source link and copy its text manually.';
+};
+$('search').addEventListener('input',render);
+$('navDetail').onclick=()=>chosen?show('detail'):show('home');
+$('navInstall').onclick=()=>chosen?show('install'):show('home');
+loadSkills();
+</script>
+</body>
+    </html>
