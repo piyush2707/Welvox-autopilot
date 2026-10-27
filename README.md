@@ -15,9 +15,11 @@ The project includes individual "SKILL.md" files for different software engineer
 **🌐 Live Demo:** [Explore Welvox AUTOPILOT](https://piyush2707.github.io/Welvox-autopilot/)
 
 
-[![Latest Release](https://img.shields.io/github/v/release/Welvox-In/welvox-autopilot?include_prereleases&label=latest%20release)](https://github.com/Welvox-In/welvox-autopilot/releases/latest)
 
-[🚀 View Welvox AUTOPILOT Releases](https://github.com/piyush2707/Welvox-autopilot/releases/tag/v0.1.0)
+[![Latest Release](https://img.shields.io/github/v/release/piyush2707/Welvox-autopilot?include_prereleases&label=latest%20release)](https://github.com/piyush2707/Welvox-autopilot/releases/latest)
+
+[🚀 View all Welvox AUTOPILOT releases](https://github.com/piyush2707/Welvox-autopilot/releases)
+
 
 
 The goal is simple: make AI-assisted development more structured, useful, transparent, and reliable.
